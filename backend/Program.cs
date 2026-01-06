@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using OrderVerificationApi.Services;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,41 +86,64 @@ builder.Services.AddControllers()
     });
 
 // Configurar CORS para permitir peticiones desde el frontend
-builder.Services.AddCors(options =>
+// NOTA: En Azure App Service, si CORS está configurado en Azure Portal,
+// el código NO debe aplicar su propia política para evitar conflictos.
+// Azure Portal CORS tiene prioridad y se aplica a nivel de infraestructura.
+var useCodeCors = !builder.Environment.IsProduction() || 
+                  string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+
+if (useCodeCors)
 {
-    options.AddPolicy("FrontendPolicy", policy =>
+    builder.Services.AddCors(options =>
     {
-        var allowedOrigins = new List<string>
+        options.AddPolicy("FrontendPolicy", policy =>
         {
-            // Desarrollo local
-            "http://localhost:3000",
-            "http://localhost:3002",
-            "http://localhost:5173",
-            "http://localhost:8080",
-            "http://127.0.0.1:8080",
-            "http://localhost:8081",
-            "http://127.0.0.1:8081",
-        };
+            var allowedOrigins = new List<string>
+            {
+                // Desarrollo local
+                "http://localhost:3000",
+                "http://localhost:3002",
+                "http://localhost:5173",
+                "http://localhost:8080",
+                "http://127.0.0.1:8080",
+                "http://localhost:8081",
+                "http://127.0.0.1:8081",
+            };
 
-        // Agregar orígenes desde configuración (para producción)
-        var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-        if (corsOrigins != null && corsOrigins.Length > 0)
-        {
-            allowedOrigins.AddRange(corsOrigins);
-        }
+            // Agregar orígenes desde configuración (para producción local/testing)
+            var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+            if (corsOrigins != null && corsOrigins.Length > 0)
+            {
+                // Filtrar wildcards ya que ASP.NET Core CORS no los soporta
+                // En producción en Azure, usar Azure Portal CORS para wildcards
+                var validOrigins = corsOrigins.Where(origin => 
+                    !string.IsNullOrWhiteSpace(origin) && 
+                    !origin.Contains("*")).ToList();
+                allowedOrigins.AddRange(validOrigins);
+            }
 
-        // Agregar URL del App Service si está configurada
-        var appServiceUrl = builder.Configuration["AppService:FrontendUrl"];
-        if (!string.IsNullOrWhiteSpace(appServiceUrl))
-        {
-            allowedOrigins.Add(appServiceUrl);
-        }
+            // Agregar URL del App Service si está configurada
+            var appServiceUrl = builder.Configuration["AppService:FrontendUrl"];
+            if (!string.IsNullOrWhiteSpace(appServiceUrl))
+            {
+                allowedOrigins.Add(appServiceUrl);
+            }
 
-        policy.WithOrigins(allowedOrigins.ToArray())
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+            policy.WithOrigins(allowedOrigins.Distinct().ToArray())
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Permitir credenciales para compatibilidad con Azure Portal
+        });
     });
-});
+}
+else
+{
+    // En Azure App Service con CORS configurado en Azure Portal,
+    // no registramos CORS en el código para evitar conflictos.
+    // Azure Portal CORS se aplica automáticamente a nivel de infraestructura.
+    Console.WriteLine("INFO: CORS será manejado por Azure Portal. " +
+                     "Asegúrate de configurar CORS en Azure Portal → App Service → CORS.");
+}
 
 // Swagger para documentación
 builder.Services.AddEndpointsApiExplorer();
@@ -141,8 +166,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Habilitar CORS
-app.UseCors("FrontendPolicy");
+// Habilitar CORS solo si está configurado en el código
+// En Azure App Service con CORS de Azure Portal, esto no se ejecuta
+if (useCodeCors)
+{
+    app.UseCors("FrontendPolicy");
+}
 
 // Autenticación y autorización (solo si está configurado)
 if (app.Configuration.GetSection("AzureAdB2C").Exists())
