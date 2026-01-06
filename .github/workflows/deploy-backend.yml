@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: portal-melcon-api
+  AZURE_WEBAPP_NAME: portal-melcon
   DOTNET_VERSION: '8.0.x'
 
 jobs:
