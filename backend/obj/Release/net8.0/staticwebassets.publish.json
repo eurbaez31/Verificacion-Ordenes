@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "mmi11pTKimUB3SDL4iuHKLJ6Jiy5lYPUvj1jnZe0YHY=",
+  "Source": "OrderVerificationApi",
+  "BasePath": "_content/OrderVerificationApi",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
