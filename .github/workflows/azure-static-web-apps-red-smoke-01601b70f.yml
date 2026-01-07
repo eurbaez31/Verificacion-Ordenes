@@ -51,7 +51,7 @@ jobs:
           VITE_B2C_REDIRECT_URI: ${{ secrets.VITE_B2C_REDIRECT_URI }}
           VITE_B2C_KNOWN_AUTHORITY: ${{ secrets.VITE_B2C_KNOWN_AUTHORITY }}
           VITE_B2C_SCOPES: ${{ secrets.VITE_B2C_SCOPES }}
-          VITE_AUTH_DISABLED: ${{ secrets.VITE_AUTH_DISABLED || 'false' }}
+          VITE_AUTH_DISABLED: ${{ secrets.VITE_AUTH_DISABLED || 'true' }}
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
