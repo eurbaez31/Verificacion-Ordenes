@@ -7,7 +7,7 @@
 /// </remarks>
 table 60370 "Portal Setup"
 {
-    Caption = 'Portal Setup';
+    Caption = 'Portal QR Code Setup';
     DataClassification = CustomerContent;
 
     fields

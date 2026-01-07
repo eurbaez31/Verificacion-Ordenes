@@ -6,7 +6,7 @@ page 60370 "Portal Setup"
 {
     PageType = Card;
     SourceTable = "Portal Setup";
-    Caption = 'Portal Setup';
+    Caption = 'Portal QR Code Setup';
     UsageCategory = Administration;
     ApplicationArea = All;
 
