@@ -139,3 +139,8 @@ C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\V
 C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\obj\Debug\net8.0\OrderVerificationApi.dll
 C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\obj\Debug\net8.0\refint\OrderVerificationApi.dll
 C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\obj\Debug\net8.0\OrderVerificationApi.pdb
+C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\bin\Debug\net8.0\OrderVerificationApi.deps.json
+C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\bin\Debug\net8.0\OrderVerificationApi.runtimeconfig.json
+C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\bin\Debug\net8.0\OrderVerificationApi.pdb
+C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\obj\Debug\net8.0\OrderVerificationApi.genruntimeconfig.cache
+C:\Users\eurbaez\OneDrive - Melcon Inversiones y Construcciones SRL\Dev Melcon\Verificador de Ordenes\backend\obj\Debug\net8.0\ref\OrderVerificationApi.dll
